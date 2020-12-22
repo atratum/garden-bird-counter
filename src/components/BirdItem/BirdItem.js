@@ -5,7 +5,9 @@ function BirdItem(props) {
     const {species} = props;
 
     return (
-        <div>{species}</div>
+        <div>
+            <img src={require('../../assets/images/species/' + species + '.png').default} alt={species} />
+        </div>
     );
 
 }
