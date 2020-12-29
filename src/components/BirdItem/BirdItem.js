@@ -1,15 +1,38 @@
 import React from 'react';
 
+import styled from 'styled-components'
+
 function BirdItem(props) {
 
     const {species} = props;
 
     return (
-        <div>
-            <img src={require('../../assets/images/species/' + species + '.png').default} alt={species} />
-        </div>
+        <StyledBirdItem>
+            <img 
+                src={require('../../assets/images/species/' + species + '.png').default}
+                alt={species}
+                style={{
+                    maxWidth: '10rem'
+                }}
+            />
+            <Counter>0</Counter>
+        </StyledBirdItem>
     );
 
 }
 
 export default BirdItem;
+
+const StyledBirdItem = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const Counter = styled.div`
+    background-color: #111;
+    color: #fff;
+    padding: 1rem;
+    line-height: 1;
+    border-radius: 50%;
+`;
