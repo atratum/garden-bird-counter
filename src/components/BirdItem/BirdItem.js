@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components'
 
-function BirdItem(props) {
+export default function BirdItem(props) {
 
     const {species} = props;
 
@@ -20,8 +20,6 @@ function BirdItem(props) {
     );
 
 }
-
-export default BirdItem;
 
 const StyledBirdItem = styled.div`
     display: flex;
