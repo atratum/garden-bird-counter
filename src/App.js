@@ -33,6 +33,7 @@ if (firebase.apps.length === 0) {
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [species, setSpecies] = useState([]);
+  const [count, setCount] = useState([]);
 
   useEffect(() => {
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
@@ -43,13 +44,8 @@ function App() {
 
   useEffect(() => {
     if (isSignedIn) {
-      axios.get('https://garden-bird-counter-default-rtdb.firebaseio.com/species.json')
-        .then(resp => {
-          setSpecies(resp.data);
-        })
-        .catch(err => {
-          alert(err);
-        })
+      fetchSpecies();
+      fetchCountToday();
     }
   }, [isSignedIn])
 
@@ -57,10 +53,51 @@ function App() {
     return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
   }
 
+  const incrementCount = (speciesID, incAmount) => {
+    const currentDate = new Date().toISOString().slice(0, 10);
+    firebase.database()
+      .ref('countByDate')
+      .child(currentDate)
+      .child(speciesID)
+      .set(firebase.database.ServerValue.increment(incAmount));
+  }
+
+  const fetchSpecies = () => {
+    axios.get('https://garden-bird-counter-default-rtdb.firebaseio.com/species.json')
+      .then(resp => {
+        setSpecies(resp.data);
+      })
+      .catch(err => {
+        alert(err);
+      })
+  }
+
+  const fetchCountToday = () => {
+    const currentDate = new Date().toISOString().slice(0, 10);
+    axios.get(`https://garden-bird-counter-default-rtdb.firebaseio.com/countByDate/${currentDate}.json`)
+      .then(resp => {
+        setCount(resp.data);
+      })
+      .catch(err => {
+        alert(err);
+      })
+  }
+
+  const handlerClick = e => {
+    const newCount = [...count];
+    newCount[e.currentTarget.value] += 1;
+    setCount(newCount);
+    incrementCount(e.currentTarget.value, 1);
+  }
+
   return (
     <>
       <StyledMain>
-        <BirdList species={species} />
+        <BirdList
+          species={species}
+          count={count}
+          handlerClick={handlerClick}
+        />
       </StyledMain>
       <Footer>
         <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
