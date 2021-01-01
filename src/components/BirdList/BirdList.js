@@ -6,12 +6,20 @@ import BirdItem from '../BirdItem/BirdItem';
 
 export default function BirdList(props) {
 
-    const {species} = props;
+    const {species, count, handlerClick} = props;
 
     return (
         <StyledBirdList>
-            {species.map((species, key) => {
-                return <BirdItem species={species} key={key} />
+            {species.map((species, index) => {
+                return (
+                    <BirdItem 
+                        species={species}
+                        key={index}
+                        count={count[index]}
+                        handlerClick={handlerClick}
+                        speciesID={index}
+                    />
+                );
             })}
         </StyledBirdList>
     );

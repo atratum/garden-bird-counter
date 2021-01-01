@@ -2,12 +2,14 @@ import React from 'react';
 
 import styled from 'styled-components'
 
+import Counter from '../Counter/Counter';
+
 export default function BirdItem(props) {
 
-    const {species} = props;
+    const {species, count, handlerClick, speciesID} = props;
 
     return (
-        <StyledBirdItem>
+        <StyledBirdItem onClick={handlerClick} value={speciesID}>
             <img 
                 src={require('../../assets/images/species/' + species + '.png').default}
                 alt={species}
@@ -15,22 +17,16 @@ export default function BirdItem(props) {
                     maxWidth: '10rem'
                 }}
             />
-            <Counter>0</Counter>
+            <Counter count={count} />
         </StyledBirdItem>
     );
 
 }
 
-const StyledBirdItem = styled.div`
+const StyledBirdItem = styled.button`
+    background: transparent;
+    border: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-`;
-
-const Counter = styled.div`
-    background-color: #111;
-    color: #fff;
-    padding: 1rem;
-    line-height: 1;
-    border-radius: 50%;
 `;
